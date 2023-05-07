@@ -1,0 +1,297 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+        <title>3D world</title>
+        <link rel="stylesheet" href="output.css">
+        <style>
+            html, body {margin:0; padding:0;}
+            body 
+            {
+                background: black;
+                overflow: hidden;
+                cursor: none;
+            }
+
+            #mainDiv
+            {
+                margin: 200px auto;
+                perspective: 800px;
+            }
+
+            #boxDiv 
+            {
+                transform-style: preserve-3d;
+                transform: translateZ(600px);
+            }
+
+            #boxDiv div
+            {
+                position: absolute;
+                width: 500px;
+                height: 500px;
+            }
+
+            #front
+            {
+                transform: translateZ(250px) rotateY(180deg);
+            }
+            
+            #back
+            {
+                transform: translateZ(-250px);
+            }
+
+            #left
+            {
+                transform: rotateY(90deg) translateX(-250px);
+                transform-origin: left;
+            }
+
+            #right
+            {
+                transform: rotateY(-90deg) translateX(250px);
+                transform-origin: right;
+            }
+
+            #top
+            {
+                transform: rotateX(-90deg) translateY(-250px);
+                transform-origin: top;
+            }
+
+            #bottom
+            {
+                transform: rotateX(90deg) translateY(250px);
+                transform-origin: bottom;
+            }
+
+            img{
+                width: 500px;
+                height: 500px;
+            }
+
+            #start
+            {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font: 60px existence;
+                color: white;
+                text-align: center;
+                opacity: 0.6;
+                visibility: visible;
+            }
+
+            #pause
+            {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0.6;
+                background: black;
+                visibility: hidden;
+            }
+
+            #resume, #settings, #credits, #setting1, #setting2
+            {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font: 60px existence;
+                color: white;
+                text-align: center;
+                opacity: 0.6;
+                visibility: hidden;
+            }
+
+            #credit1 {
+                position:fixed;
+                top: 50%;
+                left: 50%;
+                font: 60px existence;
+                transform: translate(-50%, -50%);
+                color: white;
+                opacity: 2;
+                text-align: center;
+                visibility: hidden;
+            }
+
+            #goBack 
+            {
+                position: fixed;
+                left: 50px;
+                top: 50px;
+                transform: translateY(-50%);
+                font: 60px existence;
+                text-align: center;
+                color: white;
+                opacity: 0.6;
+                visibility: hidden;
+            }
+
+            #start{top:40%}
+            #resume{top: 30%};
+            #settings{top: 50%}
+            #credits{top: 70%;}
+            #setting1{top: 40%}
+            #setting2{top: 60%;}
+            #credit1{top: 50%;}
+
+            #resume:hover, #settings:hover, #credits:hover, #setting1:hover, #setting2:hover, #goBack:hover, #start:hover{opacity: 2; scale: 101%;}
+
+        </style>
+    </head>
+    <body>
+        <div id="mainDiv" class="w-[500px] h-[500px]">
+            <div id="boxDiv" class="w-[500px] h-[500px]">
+                <div id="front"><img src="front.jpg"/></div>
+                <div id="back"><img src="back.jpg" /></div>
+                <div id="left"><img src="left.jpg" /></div>
+                <div id="right"><img src="right.jpg" /></div>
+                <div id="top"><img src="top.jpg" /></div>
+                <div id="bottom"><img src="bottom.jpg" /></div>
+            </div>
+        </div>
+
+        <div id="start">Start</div>
+        <div id="pause"></div>
+        <div id="resume">Resume</div>
+        <div id="settings">Settings</div>
+        <div id="credits">Credits</div>
+        <div id="setting1">Vertical Movement</div>
+        <div id="setting2">Mouse Sensitivity</div>
+        <div id="credit1">Graphics <hr> Created by Mardav Jadaun</div>
+        <div id="goBack"><<</div>
+
+        <script>
+
+            setTimeout(function(){window.scrollTo(0,0); }, 500);
+
+            var world = document.getElementById("boxDiv");
+            var start = document.getElementById("start");
+            var pause = document.getElementById("pause");
+            var resume = document.getElementById("resume");
+            var settings = document.getElementById("settings");
+            var credits = document.getElementById("credits");
+            var setting1 = document.getElementById("setting1");
+            var setting2 = document.getElementById("setting2");
+            var credit1 = document.getElementById("credit1");
+            var goBack = document.getElementById("goBack");
+            var x;
+            var y;
+            var isPaused = false;
+
+            document.addEventListener('mousemove', runGame);
+            document.addEventListener('keyup', function(e){
+                if(e.keyCode === 27) (isPaused) ? resumeGame () : pauseGame();
+            });
+            start.addEventListener('click', startGame)
+            resume.addEventListener('click', resumeGame);
+            settings.addEventListener('click', settingsClicked);
+            credits.addEventListener('click', creditsClicked);
+            goBack.addEventListener('click', goBackClicked);
+
+            function pauseGame()
+            {
+                isPaused = true;
+                document.body.style.cursor = "crosshair";
+                pause.style.visibility = "visible";
+                showPause();
+            }
+
+            function startGame()
+            {
+                isPaused = false;
+                start.style.visibility = "visible"
+                hideStart();
+            }
+
+            function hideStart()
+            {
+                start.style.visibility = "hidden";
+            }
+
+            function resumeGame()
+            {
+                isPaused = false;
+                document.body.style.cursor = "none"
+                pause.style.visibility = "hidden";
+                hidePause();
+                hideSettings();
+                hideCredits();
+            }
+
+            function settingsClicked()
+            {
+                hidePause();
+                showSettings();
+            }
+
+            function creditsClicked()
+            {
+                hidePause();
+                showCredits();
+            }
+
+            function goBackClicked() 
+            {
+                hideSettings();
+                hideCredits();
+                showPause();
+            }
+
+            function showPause()
+            {
+                resume.style.visibility = "visible";
+                settings.style.visibility = "visible";
+                credits.style.visibility = "visible";
+            }
+
+            function hidePause()
+            {
+                resume.style.visibility = "hidden";
+                settings.style.visibility = "hidden";
+                credits.style.visibility = "hidden";
+            }
+
+            function showSettings()
+            {
+                setting1.style.visibility = "visible";
+                setting2.style.visibility = "visible";
+                goBack.style.visibility = "visible"; 
+            }
+
+            function hideSettings() 
+            {
+                setting1.style.visibility = "hidden";
+                setting2.style.visibility = "hidden";
+                goBack.style.visibility = "hidden"; 
+            }
+
+            function showCredits() {
+                credit1.style.visibility = "visible";
+                goBack.style.visibility = "visible";
+            }
+
+            function hideCredits() {
+                credit1.style.visibility = "hidden";
+                goBack.style.visibility = "hidden";
+            }
+
+            function runGame(e)
+            {
+                if(!isPaused){
+                    x = e.clientX;
+                    y = e.clientY;
+                    y = -y;
+                    world.style.transform = "translateZ(600px) rotateX(" + y + "deg) rotateY(" + x + "deg)";
+                }
+            }
+
+        </script>
+    </body>
+  </html>
