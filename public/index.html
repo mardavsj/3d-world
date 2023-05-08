@@ -70,19 +70,6 @@
                 height: 500px;
             }
 
-            #start
-            {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font: 60px existence;
-                color: white;
-                text-align: center;
-                opacity: 0.6;
-                visibility: visible;
-            }
-
             #pause
             {
                 position: fixed;
@@ -93,6 +80,19 @@
                 opacity: 0.6;
                 background: black;
                 visibility: hidden;
+            }
+
+            #display
+            {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                font: 30px existence;
+                transform: translate(-50%,-50%);
+                color: white;
+                text-align: center;
+                opacity: 0.8;
+                visibility: visible;
             }
 
             #resume, #settings, #credits, #setting1, #setting2
@@ -133,7 +133,7 @@
                 visibility: hidden;
             }
 
-            #start{top:40%}
+            #display{bottom: 5%;}
             #resume{top: 30%};
             #settings{top: 50%}
             #credits{top: 70%;}
@@ -141,7 +141,7 @@
             #setting2{top: 60%;}
             #credit1{top: 50%;}
 
-            #resume:hover, #settings:hover, #credits:hover, #setting1:hover, #setting2:hover, #goBack:hover, #start:hover{opacity: 2; scale: 101%;}
+            #resume:hover, #settings:hover, #credits:hover, #setting1:hover, #setting2:hover, #goBack:hover {opacity: 2; scale: 101%;}
 
         </style>
     </head>
@@ -157,7 +157,7 @@
             </div>
         </div>
 
-        <div id="start">Start</div>
+        <div id="display">| Press Esc for more options |</div>
         <div id="pause"></div>
         <div id="resume">Resume</div>
         <div id="settings">Settings</div>
@@ -172,7 +172,6 @@
             setTimeout(function(){window.scrollTo(0,0); }, 500);
 
             var world = document.getElementById("boxDiv");
-            var start = document.getElementById("start");
             var pause = document.getElementById("pause");
             var resume = document.getElementById("resume");
             var settings = document.getElementById("settings");
@@ -189,7 +188,6 @@
             document.addEventListener('keyup', function(e){
                 if(e.keyCode === 27) (isPaused) ? resumeGame () : pauseGame();
             });
-            start.addEventListener('click', startGame)
             resume.addEventListener('click', resumeGame);
             settings.addEventListener('click', settingsClicked);
             credits.addEventListener('click', creditsClicked);
@@ -201,18 +199,6 @@
                 document.body.style.cursor = "crosshair";
                 pause.style.visibility = "visible";
                 showPause();
-            }
-
-            function startGame()
-            {
-                isPaused = false;
-                start.style.visibility = "visible"
-                hideStart();
-            }
-
-            function hideStart()
-            {
-                start.style.visibility = "hidden";
             }
 
             function resumeGame()
@@ -291,7 +277,6 @@
                     world.style.transform = "translateZ(600px) rotateX(" + y + "deg) rotateY(" + x + "deg)";
                 }
             }
-
         </script>
     </body>
   </html>
